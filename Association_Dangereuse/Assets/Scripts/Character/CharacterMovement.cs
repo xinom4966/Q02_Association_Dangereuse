@@ -10,11 +10,13 @@ public class CharacterMovement : NetworkBehaviour
     [SerializeField] private float walkSpeed = 10f;
     [SerializeField] private float sprintSpeed = 20f;
     [SerializeField] private float crouchSpeed = 5f;
+    [SerializeField] private float gravity = 30f;
     [SerializeField] private Vector3 crouchCameraPosition;
     [SerializeField] private Vector3 baseCameraPosition;
     [SerializeField] private float crouchTransitionSpeed = 1f;
     [SerializeField] private Vector3 crouchScale;
     [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float jumpForce = 5f;
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference lookAction;
     private float rotationY;
@@ -22,6 +24,8 @@ public class CharacterMovement : NetworkBehaviour
     private Vector2 movementVector2d;
     private Vector3 movementVector3d;
     private Vector2 rotationVector;
+    private float verticalVelocity;
+    //private bool isGrounded = true;
     private MovementState movementState = MovementState.Walking;
 
     public override void OnNetworkSpawn()
@@ -65,6 +69,9 @@ public class CharacterMovement : NetworkBehaviour
                 break;
         }
         myController.Move(movementVector3d);
+
+        verticalVelocity = verticalVelocity + gravity * Time.deltaTime;
+        myController.Move(new Vector3(0, verticalVelocity, 0)*Time.deltaTime);
     }
 
     private void Rotate()
@@ -114,11 +121,21 @@ public class CharacterMovement : NetworkBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+
+    public void Jump(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started && myController.isGrounded)
+        {
+            verticalVelocity = jumpForce;
+            movementState = MovementState.Jumping;
+        }
+    }
 }
 
 public enum MovementState
 {
     Walking,
     Running,
-    Crouching
+    Crouching,
+    Jumping
 }
