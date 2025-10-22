@@ -6,6 +6,7 @@ using System.Collections;
 public class CharacterMovement : NetworkBehaviour
 {
     [SerializeField] private CharacterController myController;
+    [SerializeField] private Transform camPivot;
     [SerializeField] private Camera myCamera;
     [SerializeField] private float walkSpeed = 10f;
     [SerializeField] private float sprintSpeed = 20f;
@@ -25,7 +26,6 @@ public class CharacterMovement : NetworkBehaviour
     private Vector3 movementVector3d;
     private Vector2 rotationVector;
     private float verticalVelocity;
-    //private bool isGrounded = true;
     private MovementState movementState = MovementState.Walking;
 
     public override void OnNetworkSpawn()
@@ -34,6 +34,7 @@ public class CharacterMovement : NetworkBehaviour
         if (!IsOwner)
         {
             GetComponent<CharacterMovement>().enabled = false;
+            Destroy(myCamera.gameObject);
             return;
         }
         Cursor.visible = false;
@@ -80,7 +81,7 @@ public class CharacterMovement : NetworkBehaviour
         rotationX -= rotationVector.y * rotationSpeed * Time.deltaTime;
         rotationX = Mathf.Clamp(rotationX, -80, 80);
         transform.rotation = Quaternion.Euler(0, rotationY, 0);
-        myCamera.gameObject.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        camPivot.localRotation = Quaternion.Euler(rotationX, 0, 0);
     }
 
     public void Sprint(InputAction.CallbackContext ctx)
@@ -115,9 +116,9 @@ public class CharacterMovement : NetworkBehaviour
 
     IEnumerator CrouchSmoothTransition(Vector3 targetPosition)
     {
-        while (myCamera.transform.localPosition != targetPosition)
+        while (camPivot.localPosition != targetPosition)
         {
-            myCamera.transform.localPosition = Vector3.MoveTowards(myCamera.transform.localPosition, targetPosition, crouchTransitionSpeed * Time.deltaTime);
+            camPivot.localPosition = Vector3.MoveTowards(camPivot.localPosition, targetPosition, crouchTransitionSpeed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
     }
