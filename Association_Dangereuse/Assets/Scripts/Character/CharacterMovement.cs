@@ -71,7 +71,7 @@ public class CharacterMovement : NetworkBehaviour
         }
         myController.Move(movementVector3d);
 
-        verticalVelocity = verticalVelocity + gravity * Time.deltaTime;
+        verticalVelocity = verticalVelocity - gravity * Time.deltaTime;
         myController.Move(new Vector3(0, verticalVelocity, 0)*Time.deltaTime);
     }
 
