@@ -10,7 +10,7 @@ public class HonkItem : Item
         myAudioSource.Play();
     }
 
-    protected override void Interact()
+    public override void Interact()
     {
         base.Interact();
         Honk();
