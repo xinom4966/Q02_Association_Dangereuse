@@ -48,7 +48,7 @@ public class CharacterInventory : NetworkBehaviour
                 {
                     activeItem = hit.transform.gameObject.GetComponent<Item>();
                     inventory[currentIndex] = activeItem;
-                    hit.transform.parent = transform;
+                    activeItem.Grab(transform);
                 }
             }
         }
@@ -60,18 +60,25 @@ public class CharacterInventory : NetworkBehaviour
         {
             currentIndex += Mathf.RoundToInt(ctx.ReadValue<Vector2>().y);
             currentIndex = Mathf.Clamp(currentIndex, 0, inventorySize-1);
-            if (activeItem != null)
-            {
-                activeItem.gameObject.SetActive(false);
-            }
             if (inventory[currentIndex] == null)
             {
-                Debug.Log("C'est nul !");
                 activeItem = null;
                 return;
             }
             activeItem = inventory[currentIndex];
-            activeItem.gameObject.SetActive(true);
+            Debug.Log(activeItem.gameObject.name);
+        }
+    }
+
+    public void ReleaseItem(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            if (activeItem != null)
+            {
+                activeItem.Release();
+                activeItem = null;
+            }
         }
     }
 }

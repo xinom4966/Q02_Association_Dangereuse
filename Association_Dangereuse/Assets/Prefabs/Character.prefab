@@ -452,6 +452,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7529443445614081}
+        m_TargetAssemblyTypeName: CharacterInventory, Assembly-CSharp
+        m_MethodName: ReleaseItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1920942a-b487-4468-bd84-e6b6654e7ee2
+    m_ActionName: 'Player/Release[/Keyboard/g]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -494,7 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1352260929
+  GlobalObjectIdHash: 1048527657
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -549,7 +565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInventory
   ShowTopMostFoldoutHeaderGroup: 1
   inventorySize: 5
-  grabRange: 10
+  grabRange: 100
   camPivot: {fileID: 179787327406979276}
   grabMask:
     serializedVersion: 2

@@ -1,5 +1,7 @@
-using UnityEngine;
 using Unity.Netcode;
+using Unity.Netcode.Components;
+using UnityEngine;
+
 
 public class Item : NetworkBehaviour
 {
@@ -7,28 +9,69 @@ public class Item : NetworkBehaviour
     [SerializeField] protected int id;
     [SerializeField] protected int value;
     [SerializeField] protected bool isGrabbable;
+    private Transform myParent;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        /*if (NetworkManager.Singleton.IsClient)
+        if (!NetworkManager.Singleton.IsHost)
         {
-            Debug.Log("tspmo");
             NetworkObject.Despawn();
-        }*/
+        }
     }
 
     public virtual void Interact()
     {
-        if (isGrabbable)
-        {
-            GetComponent<BoxCollider>().enabled = false;
-            GetComponent<Rigidbody>().isKinematic = true;
-        }
+        
     }
 
     public bool GetIsGrabbable()
     {
         return isGrabbable;
+    }
+
+    public void Grab(Transform newParent)
+    {
+        if (isGrabbable)
+        {
+            myParent = newParent;
+            //ReparentItemClientRpc();
+            ItemDisapearServerRpc();
+            //Interact();
+
+            //NetworkObject.Despawn();
+            //gameObject.SetActive(false);
+        }
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    public void ItemDisapearServerRpc()
+    {
+        Interact();
+        gameObject.SetActive(false);
+        ItemDisapearClientRpc();
+        //NetworkObject.Despawn(true);
+        //ReparentItemClientRpc();
+    }
+
+    [ClientRpc (RequireOwnership = false)]
+    public void ItemDisapearClientRpc()
+    {
+        Interact();
+        gameObject.SetActive(false);
+        //NetworkObject.TrySetParent(myParent, false);
+    }
+
+    public void Release()
+    {
+        ReleaseServerRpc(myParent.position);
+        gameObject.SetActive(true);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ReleaseServerRpc(Vector3 parentPos)
+    {
+        transform.position = parentPos;
+        GetComponent<NetworkTransform>().Teleport(parentPos, Quaternion.identity, transform.localScale);
     }
 }
