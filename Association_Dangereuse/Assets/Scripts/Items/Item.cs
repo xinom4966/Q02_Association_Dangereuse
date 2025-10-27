@@ -90,4 +90,9 @@ public class Item : NetworkBehaviour
     {
         return sprite;
     }
+
+    public int GetValue()
+    {
+        return value;
+    }
 }
