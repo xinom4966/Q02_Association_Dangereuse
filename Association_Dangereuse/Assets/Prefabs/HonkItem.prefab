@@ -185,6 +185,7 @@ MonoBehaviour:
   id: 1
   value: 10
   isGrabbable: 1
+  sprite: {fileID: 21300000, guid: d0fb5bbd95c32324093a0158ab1e24e0, type: 3}
   myAudioSource: {fileID: 574987564621175973}
 --- !u!82 &574987564621175973
 AudioSource:

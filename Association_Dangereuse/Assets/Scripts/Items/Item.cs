@@ -9,6 +9,7 @@ public class Item : NetworkBehaviour
     [SerializeField] protected int id;
     [SerializeField] protected int value;
     [SerializeField] protected bool isGrabbable;
+    [SerializeField] protected Sprite sprite;
     private Transform myParent;
 
     public override void OnNetworkSpawn()
@@ -73,5 +74,20 @@ public class Item : NetworkBehaviour
     {
         transform.position = parentPos;
         GetComponent<NetworkTransform>().Teleport(parentPos, Quaternion.identity, transform.localScale);
+        gameObject.SetActive(true);
+        ReleaseClientRpc(parentPos);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ReleaseClientRpc(Vector3 parentPos)
+    {
+        transform.position = parentPos;
+        GetComponent<NetworkTransform>().Teleport(parentPos, Quaternion.identity, transform.localScale);
+        gameObject.SetActive(true);
+    }
+
+    public Sprite GetItemSprite()
+    {
+        return sprite;
     }
 }

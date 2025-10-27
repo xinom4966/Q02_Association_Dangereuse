@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CharacterInventory : NetworkBehaviour
 {
@@ -9,6 +10,9 @@ public class CharacterInventory : NetworkBehaviour
     [SerializeField] private float grabRange = 1f;
     [SerializeField] private Transform camPivot;
     [SerializeField] private LayerMask grabMask;
+    [SerializeField] private List<Image> inventoryImages = new List<Image>();
+    [SerializeField] private Sprite inventoryPlaceHolder;
+    [SerializeField] private Color semiTransparent;
     private RaycastHit hit;
     private Item activeItem;
     private List<Item> inventory;
@@ -48,6 +52,8 @@ public class CharacterInventory : NetworkBehaviour
                 {
                     activeItem = hit.transform.gameObject.GetComponent<Item>();
                     inventory[currentIndex] = activeItem;
+                    inventoryImages[currentIndex].sprite = activeItem.GetItemSprite();
+                    inventoryImages[currentIndex].color += semiTransparent;
                     activeItem.Grab(transform);
                 }
             }
@@ -58,15 +64,19 @@ public class CharacterInventory : NetworkBehaviour
     {
         if (ctx.started)
         {
+            inventoryImages[currentIndex].color -= semiTransparent;
             currentIndex += Mathf.RoundToInt(ctx.ReadValue<Vector2>().y);
             currentIndex = Mathf.Clamp(currentIndex, 0, inventorySize-1);
             if (inventory[currentIndex] == null)
             {
                 activeItem = null;
+                inventoryImages[currentIndex].sprite = inventoryPlaceHolder;
+                inventoryImages[currentIndex].color += semiTransparent;
                 return;
             }
             activeItem = inventory[currentIndex];
-            Debug.Log(activeItem.gameObject.name);
+            inventoryImages[currentIndex].sprite = activeItem.GetItemSprite();
+            inventoryImages[currentIndex].color += semiTransparent;
         }
     }
 
