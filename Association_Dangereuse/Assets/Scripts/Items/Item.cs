@@ -65,7 +65,7 @@ public class Item : NetworkBehaviour
 
     public void Release()
     {
-        ReleaseServerRpc(myParent.position);
+        ReleaseServerRpc(myParent.position + myParent.forward);
         gameObject.SetActive(true);
     }
 

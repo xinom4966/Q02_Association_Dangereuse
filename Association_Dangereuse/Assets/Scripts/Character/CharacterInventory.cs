@@ -87,6 +87,9 @@ public class CharacterInventory : NetworkBehaviour
             if (activeItem != null)
             {
                 activeItem.Release();
+                inventory[currentIndex] = null;
+                inventoryImages[currentIndex].sprite = inventoryPlaceHolder;
+                inventoryImages[currentIndex].color -= semiTransparent;
                 activeItem = null;
             }
         }
