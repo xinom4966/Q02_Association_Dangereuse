@@ -65,7 +65,7 @@ public class Item : NetworkBehaviour
 
     public void Release()
     {
-        ReleaseServerRpc(myParent.position);
+        ReleaseServerRpc(myParent.position + myParent.forward);
         gameObject.SetActive(true);
     }
 
@@ -89,5 +89,10 @@ public class Item : NetworkBehaviour
     public Sprite GetItemSprite()
     {
         return sprite;
+    }
+
+    public int GetValue()
+    {
+        return value;
     }
 }
