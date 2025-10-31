@@ -58,9 +58,11 @@ public class CharacterMovement : NetworkBehaviour
     private void Move()
     {
         timerBetweenNoise += Time.deltaTime;
+        NoiseBehaviour noiseInstanceBehaviour = null;
         if (timerBetweenNoise >= intervalBetweenNoise)
         {
             noiseInstance = Instantiate(noisePrefab, transform.position, Quaternion.identity);
+            noiseInstanceBehaviour = noiseInstance.GetComponent<NoiseBehaviour>();
             timerBetweenNoise = 0.0f;
         }
         movementVector3d = transform.forward * movementVector2d.y + transform.right * movementVector2d.x;
@@ -68,19 +70,25 @@ public class CharacterMovement : NetworkBehaviour
         {
             case MovementState.Walking:
                 movementVector3d = movementVector3d * walkSpeed * Time.deltaTime;
+                if (noiseInstance != null && noiseInstanceBehaviour != null)
+                {
+                    noiseInstanceBehaviour.Activate(1);
+                }
                 break;
             case MovementState.Running:
                 movementVector3d = movementVector3d * sprintSpeed * Time.deltaTime;
-                if (noiseInstance != null)
+                if (noiseInstance != null && noiseInstanceBehaviour != null)
                 {
-                    noiseInstance.transform.localScale *= 2;
+                    //noiseInstance.transform.localScale *= 2;
+                    noiseInstanceBehaviour.Activate(2);
                 }
                 break;
             case MovementState.Crouching:
                 movementVector3d = movementVector3d * crouchSpeed * Time.deltaTime;
-                if (noiseInstance != null)
+                if (noiseInstance != null && noiseInstanceBehaviour != null)
                 {
-                    noiseInstance.transform.localScale *= 0.5f;
+                    //noiseInstance.transform.localScale *= 0.5f;
+                    noiseInstanceBehaviour.Activate(0.5f);
                 }
                 break;
             default:

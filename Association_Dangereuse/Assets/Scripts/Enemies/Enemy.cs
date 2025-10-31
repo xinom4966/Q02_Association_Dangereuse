@@ -5,7 +5,8 @@ using UnityEngine.AI;
 public class Enemy : NetworkBehaviour
 {
     [SerializeField] protected NavMeshAgent agent;
-    [SerializeField] protected LayerMask noiseMask;
+    //[SerializeField] protected LayerMask noiseMask;
+    [SerializeField] protected ListenerBehaviour listener;
     [SerializeField] protected float fov;
     [SerializeField] [Range(0,360)] protected float fovAngle;
     [SerializeField] protected float secondsBeforeAggression;
@@ -38,13 +39,15 @@ public class Enemy : NetworkBehaviour
         UpdateState();
     }
 
-    protected void OnTriggerEnter(Collider other)
+    /*protected void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.layer == noiseMask)
+        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.layer == noiseMask)
         {
-            agent.SetDestination(other.transform.position);
+            agent.SetDestination(collision.transform.position);
+            Debug.Log("Heard");
         }
-    }
+    }*/
 
     protected void UpdateState()
     {
@@ -87,6 +90,17 @@ public class Enemy : NetworkBehaviour
     protected virtual void Pursuit()
     {
         agent.speed = chaseSpeed;
+    }
+
+    public void OnNoiseEvent()
+    {
+        if (state == EnemyState.Aggresive)
+        {
+            Debug.Log("AggroHeard");
+            return;
+        }
+        Debug.Log("heard");
+        agent.SetDestination(listener.GetNoiseOrigin());
     }
 }
 
