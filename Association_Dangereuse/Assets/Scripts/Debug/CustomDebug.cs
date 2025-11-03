@@ -4,7 +4,7 @@ using UnityEngine;
 public class CustomDebug : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI tmpro;
-    [HideInInspector] public CustomDebug Instance;
+    [HideInInspector] public static CustomDebug Instance;
 
 
     private void Awake()

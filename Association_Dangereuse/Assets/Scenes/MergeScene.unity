@@ -658,7 +658,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomDebug
   tmpro: {fileID: 156405472}
-  Instance: {fileID: 0}
 --- !u!1 &145377908
 GameObject:
   m_ObjectHideFlags: 0
@@ -7013,7 +7012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SessionManager
   mainMenu: {fileID: 627405108}
   relayManager: {fileID: 1106598517}
-  menus: {fileID: 0}
+  menus: {fileID: 391569901}
   lobbyCreationParent: {fileID: 945411247}
   createLobbyNameField: {fileID: 2034259602}
   createLobbyMaxPlayersField: {fileID: 769591418}
