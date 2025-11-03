@@ -53,6 +53,10 @@ public class Enemy : NetworkBehaviour
                 SetDestinationServerRpc(target.transform.position);
                 state = EnemyState.Curious;
             }
+            else
+            {
+                playerInFov = false;
+            }
         }
         UpdateState();
     }
