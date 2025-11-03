@@ -156,6 +156,7 @@ public class CharacterMovement : NetworkBehaviour
     {
         if (ctx.started && myController.isGrounded)
         {
+            CustomDebug.Instance.UIDebugLog("jump");
             verticalVelocity = jumpForce;
             movementState = MovementState.Jumping;
         }
