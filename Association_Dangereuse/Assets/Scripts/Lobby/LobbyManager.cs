@@ -17,6 +17,7 @@ public class LobbyManager : MonoBehaviour
 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private RelayManager relayManager;
+    [SerializeField] private GameObject menus;
 
     [Header("Lobby creation")]
     [SerializeField] private GameObject lobbyCreationParent;
@@ -294,6 +295,7 @@ public class LobbyManager : MonoBehaviour
 
         lobbyListParent.SetActive(false);
         joinedLobbyParent.SetActive(false);
+        menus.SetActive(false);
     }
 
     private async void LobbyHeartbeat(Lobby lobby)

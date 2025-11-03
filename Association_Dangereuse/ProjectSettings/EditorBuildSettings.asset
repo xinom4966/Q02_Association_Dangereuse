@@ -6,15 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MergeScene.unity
+    guid: 7209608ccd17f1a4781cdb824689f6d2
+  - enabled: 0
     path: Assets/Scenes/DevLobby.unity
     guid: 0bd6feca958d3bb40a42fbb11e9d5d0a
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DevItems.unity
     guid: 6d34c78d697f43444bc5123c48cc6024
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DevEnemy.unity
     guid: c3ea019f24179fa4c81f39c45fb3ec3c
   m_configObjects:
