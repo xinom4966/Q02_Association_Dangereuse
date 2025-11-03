@@ -10,15 +10,33 @@ public class Enemy : NetworkBehaviour
     [SerializeField] protected float fov;
     [SerializeField] [Range(0,360)] protected float fovAngle;
     [SerializeField] protected float secondsBeforeAggression;
-    [SerializeField] protected float chaseSpeed;
+    [SerializeField] protected float chaseMaxSpeed;
+    [SerializeField] protected float chaseAcceleration;
+    [SerializeField] protected float maxTravelDistance;
+    [SerializeField] protected float killDistance;
     protected Collider[] targetsInFov;
     protected bool playerInFov = false;
     protected EnemyState state;
     protected float aggressionLevel;
     protected GameObject target;
+    protected float baseSpeed;
+    protected float currentSpeed;
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        baseSpeed = agent.speed;
+    }
 
     protected void Update()
     {
+        //Patrol routine
+        if (state == EnemyState.Neutral && agent.remainingDistance == 0)
+        {
+            Vector3 randomPoint = Random.insideUnitSphere * maxTravelDistance;
+            SetDestinationServerRpc(randomPoint);
+        }
+
         targetsInFov = Physics.OverlapSphere(transform.position, fov);
         foreach (Collider collider in targetsInFov)
         {
@@ -32,7 +50,7 @@ public class Enemy : NetworkBehaviour
                 //Player is in cone of vision
                 playerInFov = true;
                 target = collider.gameObject;
-                agent.SetDestination(target.transform.position);
+                SetDestinationServerRpc(target.transform.position);
                 state = EnemyState.Curious;
             }
         }
@@ -83,24 +101,52 @@ public class Enemy : NetworkBehaviour
                 {
                     Pursuit();
                 }
+                else
+                {
+                    aggressionLevel -= Time.deltaTime;
+                    if (aggressionLevel >= 0)
+                    {
+                        state = EnemyState.Neutral;
+                        aggressionLevel = 0;
+                    }
+                }
                 break;
         }
     }
 
     protected virtual void Pursuit()
     {
-        agent.speed = chaseSpeed;
+        currentSpeed = agent.speed;
+        if (currentSpeed < chaseMaxSpeed)
+        {
+            agent.speed *= chaseAcceleration;
+        }
+        if (Vector3.Distance(target.transform.position, transform.position) <= killDistance)
+        {
+            //Inflict damage until death
+        }
     }
 
     public void OnNoiseEvent()
     {
         if (state == EnemyState.Aggresive)
         {
-            Debug.Log("AggroHeard");
             return;
         }
-        Debug.Log("heard");
-        agent.SetDestination(listener.GetNoiseOrigin());
+        SetDestinationServerRpc(listener.GetNoiseOrigin());
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    private void SetDestinationServerRpc(Vector3 destination)
+    {
+        agent.SetDestination(destination);
+        SetDestinationClientRpc(destination);
+    }
+
+    [ClientRpc (RequireOwnership = false)]
+    private void SetDestinationClientRpc(Vector3 destination)
+    {
+        agent.SetDestination(destination);
     }
 }
 
