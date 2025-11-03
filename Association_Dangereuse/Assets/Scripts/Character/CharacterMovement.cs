@@ -49,7 +49,7 @@ public class CharacterMovement : NetworkBehaviour
     private void Update()
     {
         movementVector2d = moveAction.action.ReadValue<Vector2>();
-        CustomDebug.Instance.UIDebugLog(movementVector2d.ToString());
+        CustomDebug.Instance.UIDebugLog((myController.enabled && myController != null).ToString());
         Move();
 
         rotationVector = lookAction.action.ReadValue<Vector2>();
@@ -156,7 +156,6 @@ public class CharacterMovement : NetworkBehaviour
     {
         if (ctx.started && myController.isGrounded)
         {
-            CustomDebug.Instance.UIDebugLog("jump");
             verticalVelocity = jumpForce;
             movementState = MovementState.Jumping;
         }

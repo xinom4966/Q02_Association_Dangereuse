@@ -18,6 +18,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private RelayManager relayManager;
     [SerializeField] private GameObject menus;
+    [SerializeField] private GameObject menuCam;
 
     [Header("Lobby creation")]
     [SerializeField] private GameObject lobbyCreationParent;
@@ -295,6 +296,7 @@ public class LobbyManager : MonoBehaviour
 
         lobbyListParent.SetActive(false);
         joinedLobbyParent.SetActive(false);
+        menuCam.SetActive(false);
         menus.SetActive(false);
     }
 

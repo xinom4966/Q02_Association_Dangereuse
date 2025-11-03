@@ -64,7 +64,6 @@ public class CharacterInventory : NetworkBehaviour
     {
         if (ctx.started)
         {
-            CustomDebug.Instance.UIDebugLog("Scroll");
             inventoryImages[currentIndex].color -= semiTransparent;
             currentIndex += Mathf.RoundToInt(ctx.ReadValue<Vector2>().y);
             currentIndex = Mathf.Clamp(currentIndex, 0, inventorySize-1);
