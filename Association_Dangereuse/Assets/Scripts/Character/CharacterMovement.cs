@@ -49,6 +49,7 @@ public class CharacterMovement : NetworkBehaviour
     private void Update()
     {
         movementVector2d = moveAction.action.ReadValue<Vector2>();
+        CustomDebug.Instance.UIDebugLog((myController.enabled && myController != null).ToString());
         Move();
 
         rotationVector = lookAction.action.ReadValue<Vector2>();
