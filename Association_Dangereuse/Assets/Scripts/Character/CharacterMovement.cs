@@ -20,6 +20,8 @@ public class CharacterMovement : NetworkBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference lookAction;
+    [SerializeField] private float intervalBetweenNoise = 0.5f;
+    [SerializeField] private GameObject noisePrefab;
     private float rotationY;
     private float rotationX;
     private Vector2 movementVector2d;
@@ -27,6 +29,8 @@ public class CharacterMovement : NetworkBehaviour
     private Vector2 rotationVector;
     private float verticalVelocity;
     private MovementState movementState = MovementState.Walking;
+    private float timerBetweenNoise;
+    private GameObject noiseInstance;
 
     public override void OnNetworkSpawn()
     {
@@ -53,17 +57,39 @@ public class CharacterMovement : NetworkBehaviour
 
     private void Move()
     {
+        timerBetweenNoise += Time.deltaTime;
+        NoiseBehaviour noiseInstanceBehaviour = null;
+        if (timerBetweenNoise >= intervalBetweenNoise)
+        {
+            noiseInstance = Instantiate(noisePrefab, transform.position, Quaternion.identity);
+            noiseInstanceBehaviour = noiseInstance.GetComponent<NoiseBehaviour>();
+            timerBetweenNoise = 0.0f;
+        }
         movementVector3d = transform.forward * movementVector2d.y + transform.right * movementVector2d.x;
         switch (movementState)
         {
             case MovementState.Walking:
                 movementVector3d = movementVector3d * walkSpeed * Time.deltaTime;
+                if (noiseInstance != null && noiseInstanceBehaviour != null)
+                {
+                    noiseInstanceBehaviour.Activate(1);
+                }
                 break;
             case MovementState.Running:
                 movementVector3d = movementVector3d * sprintSpeed * Time.deltaTime;
+                if (noiseInstance != null && noiseInstanceBehaviour != null)
+                {
+                    //noiseInstance.transform.localScale *= 2;
+                    noiseInstanceBehaviour.Activate(2);
+                }
                 break;
             case MovementState.Crouching:
                 movementVector3d = movementVector3d * crouchSpeed * Time.deltaTime;
+                if (noiseInstance != null && noiseInstanceBehaviour != null)
+                {
+                    //noiseInstance.transform.localScale *= 0.5f;
+                    noiseInstanceBehaviour.Activate(0.5f);
+                }
                 break;
             default:
                 movementVector3d = movementVector3d * walkSpeed * Time.deltaTime;
@@ -73,6 +99,8 @@ public class CharacterMovement : NetworkBehaviour
 
         verticalVelocity = verticalVelocity - gravity * Time.deltaTime;
         myController.Move(new Vector3(0, verticalVelocity, 0)*Time.deltaTime);
+
+        noiseInstance = null;
     }
 
     private void Rotate()
