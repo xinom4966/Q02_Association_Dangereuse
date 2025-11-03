@@ -47,9 +47,9 @@ public class LobbyManager : MonoBehaviour
 
     [Space(10)]
     [Header("Password protection")]
+    [SerializeField] private GameObject inputPasswordParent;
     [SerializeField] private Button inputPasswordButton;
     [SerializeField] private TMP_InputField inputPasswordField;
-    [SerializeField] private GameObject inputPasswordParent;
 
 
     private string playerName;
@@ -95,7 +95,7 @@ public class LobbyManager : MonoBehaviour
             try
             {
                 await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID, new JoinLobbyByIdOptions
-                { Password = await InputPassword(), Player = playerData });
+                    { Password = await InputPassword(), Player = playerData });
 
                 joinedLobbyId = lobbyID;
                 lobbyListParent.SetActive(false);
