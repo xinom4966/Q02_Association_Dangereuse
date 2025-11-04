@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,6 +15,8 @@ public class Enemy : NetworkBehaviour
     [SerializeField] protected float chaseAcceleration;
     [SerializeField] protected float maxTravelDistance;
     [SerializeField] protected float killDistance;
+    [SerializeField] protected int damage;
+    [SerializeField] protected float damageInterval;
     protected Collider[] targetsInFov;
     protected bool playerInFov = false;
     protected EnemyState state;
@@ -127,7 +130,11 @@ public class Enemy : NetworkBehaviour
         }
         if (Vector3.Distance(target.transform.position, transform.position) <= killDistance)
         {
-            //Inflict damage until death
+            StartCoroutine(DamageCoroutine());
+        }
+        else
+        {
+            StopAllCoroutines();
         }
     }
 
@@ -151,6 +158,15 @@ public class Enemy : NetworkBehaviour
     private void SetDestinationClientRpc(Vector3 destination)
     {
         agent.SetDestination(destination);
+    }
+
+    IEnumerator DamageCoroutine()
+    {
+        while (true)
+        {
+            target.GetComponent<CharacterHealth>().TakeDamage(damage);
+            yield return new WaitForSeconds(damageInterval);
+        }
     }
 }
 
