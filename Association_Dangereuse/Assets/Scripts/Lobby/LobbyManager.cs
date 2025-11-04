@@ -77,6 +77,7 @@ public class LobbyManager : MonoBehaviour
 
     public void CreateProfile()
     {
+        CustomDebug.Instance.DebugLog("Create profile");
         playerName = profileNameField.text;
 
         PlayerDataObject playerDataObjectName = new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName);
