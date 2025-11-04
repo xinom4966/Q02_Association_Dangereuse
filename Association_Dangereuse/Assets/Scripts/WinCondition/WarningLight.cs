@@ -5,7 +5,7 @@ public class WarningLight : MonoBehaviour
     [SerializeField] private Light myLight;
     [SerializeField] private int minIntensity = 10;
     [SerializeField] private int maxIntensity = 100;
-    private float timer = 0.0f;
+    private float timer;
 
     private void Update()
     {
@@ -15,9 +15,7 @@ public class WarningLight : MonoBehaviour
 
         if (timer > 1.0f)
         {
-            int temp = maxIntensity;
-            maxIntensity = minIntensity;
-            minIntensity = temp;
+            (maxIntensity, minIntensity) = (minIntensity, maxIntensity);
             timer = 0.0f;
         }
     }

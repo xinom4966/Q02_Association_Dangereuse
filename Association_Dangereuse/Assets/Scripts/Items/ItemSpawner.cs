@@ -11,15 +11,6 @@ public class ItemSpawner : NetworkBehaviour
     private GameObject itemInstance;
     private NetworkObject instanceObject;
 
-    /*public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-        if (NetworkManager.Singleton.IsClient)
-        {
-            NetworkObject.Despawn();
-        }
-    }*/
-
     private void Start()
     {
         NetworkManager.Singleton.OnServerStarted += SpawnerStart;
@@ -45,4 +36,17 @@ public class ItemSpawner : NetworkBehaviour
             instanceObject.Spawn(true);
         }
     }
+
+    #region depricated functions
+
+    /*public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (NetworkManager.Singleton.IsClient)
+        {
+            NetworkObject.Despawn();
+        }
+    }*/
+
+    #endregion
 }

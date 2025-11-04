@@ -5,7 +5,7 @@ public class NoiseBehaviour : MonoBehaviour
     [SerializeField] private float range = 10f;
     [SerializeField] private float secondsBeforeDestruction = 1f;
     [SerializeField] private LayerMask listenersMask;
-    private float timer = 0.0f;
+    private float timer;
     private RaycastHit[] listeners;
 
     private void Update()

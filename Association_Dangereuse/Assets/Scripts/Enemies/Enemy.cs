@@ -15,7 +15,7 @@ public class Enemy : NetworkBehaviour
     [SerializeField] protected float maxTravelDistance;
     [SerializeField] protected float killDistance;
     protected Collider[] targetsInFov;
-    protected bool playerInFov = false;
+    protected bool playerInFov;
     protected EnemyState state;
     protected float aggressionLevel;
     protected GameObject target;
@@ -60,16 +60,6 @@ public class Enemy : NetworkBehaviour
         }
         UpdateState();
     }
-
-    /*protected void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.layer == noiseMask)
-        {
-            agent.SetDestination(collision.transform.position);
-            Debug.Log("Heard");
-        }
-    }*/
 
     protected void UpdateState()
     {
@@ -152,6 +142,20 @@ public class Enemy : NetworkBehaviour
     {
         agent.SetDestination(destination);
     }
+    
+    #region depricated functions
+
+    /*protected void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.layer == noiseMask)
+        {
+            agent.SetDestination(collision.transform.position);
+            Debug.Log("Heard");
+        }
+    }*/
+
+    #endregion
 }
 
 public enum EnemyState

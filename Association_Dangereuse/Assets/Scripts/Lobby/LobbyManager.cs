@@ -256,23 +256,6 @@ public class LobbyManager : MonoBehaviour
     
     public async void LeaveLobby()
     {
-        /* Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedLobbyId);
-        if (lobby.HostId == AuthenticationService.Instance.PlayerId)
-        {
-            foreach (Player player in lobby.Players)
-            {
-                try
-                {
-                    if(player.Id != lobby.HostId)
-                        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, player.Id);
-                }
-                catch (LobbyServiceException e)
-                {
-                    Debug.Log(e);
-                }
-            }
-        } */
-        
         try
         {
             await LobbyService.Instance.RemovePlayerAsync(joinedLobbyId, playerData.Id);
@@ -355,6 +338,28 @@ public class LobbyManager : MonoBehaviour
         while (!t.IsCompleted){}
         yield return new WaitUntil(() => !t.IsCompleted);
     }
+
+    #endregion
+
+    #region depricated
+
+    /* goes into LeaveLobby
+        Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedLobbyId);
+        if (lobby.HostId == AuthenticationService.Instance.PlayerId)
+        {
+            foreach (Player player in lobby.Players)
+            {
+                try
+                {
+                    if(player.Id != lobby.HostId)
+                        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, player.Id);
+                }
+                catch (LobbyServiceException e)
+                {
+                    Debug.Log(e);
+                }
+            }
+        } */
 
     #endregion
     
