@@ -8,6 +8,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine.UI;
 
 
@@ -291,6 +292,7 @@ public class LobbyManager : MonoBehaviour
         ShowMainMenu();
     }
 
+    
     public async void LobbyStart()
     {
         menuCam.SetActive(false);
@@ -300,7 +302,16 @@ public class LobbyManager : MonoBehaviour
         isJoined = true;
         await LobbyService.Instance.UpdateLobbyAsync(joinedLobbyId, new UpdateLobbyOptions
         { Data = new Dictionary<string, DataObject> { { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, JoinCode) } } });
+        hideClientMenus();
     }
+
+    [ClientRpc]
+    private void hideClientMenus()
+    {
+        menuCam.SetActive(false);
+        menus.SetActive(false);
+    }
+    
 
     private async void LobbyHeartbeat(Lobby lobby)
     {
