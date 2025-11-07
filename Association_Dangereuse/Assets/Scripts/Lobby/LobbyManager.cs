@@ -293,14 +293,13 @@ public class LobbyManager : MonoBehaviour
 
     public async void LobbyStart()
     {
+        menuCam.SetActive(false);
+        menus.SetActive(false);
         Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedLobbyId);
         string JoinCode = await relayManager.StartHostWithRelay(lobby.MaxPlayers);
         isJoined = true;
         await LobbyService.Instance.UpdateLobbyAsync(joinedLobbyId, new UpdateLobbyOptions
         { Data = new Dictionary<string, DataObject> { { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, JoinCode) } } });
-        
-        menuCam.SetActive(false);
-        menus.SetActive(false);
     }
 
     private async void LobbyHeartbeat(Lobby lobby)
