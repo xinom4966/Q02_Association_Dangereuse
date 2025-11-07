@@ -33,7 +33,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Transform lobbyContentParent;
     [SerializeField] private Transform lobbyItemPrefab;
     [SerializeField] private TMP_InputField searchLobbyNameInputField;
-
+    
     [Space(10)]
     [Header("Profile setup")]
     [SerializeField] private GameObject profileSetupParent;
@@ -43,6 +43,7 @@ public class LobbyManager : MonoBehaviour
     [Header("Joined lobby")]
     [SerializeField] private GameObject joinedLobbyParent;
     [SerializeField] private Transform playerItemPrefab;
+    [SerializeField] private float playerItemOffset;
     [SerializeField] private Transform playerListParent;
     [SerializeField] private TextMeshProUGUI joinedLobbyNameText;
     [SerializeField] private GameObject joinedLobbyStartButton;
@@ -243,11 +244,15 @@ public class LobbyManager : MonoBehaviour
                 Destroy(t.gameObject);
             }
 
-            foreach (Player player in lobby.Players)
+            for (var i = 0; i < lobby.Players.Count; i++)
             {
+                Player player = lobby.Players[i];
+                CustomDebug.Instance.DebugLog(player.Data["Name"].Value + " is connected");
                 Transform newPlayerItem = Instantiate(playerItemPrefab, playerListParent);
                 newPlayerItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = player.Data["Name"].Value;
-                newPlayerItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = (lobby.HostId == player.Id) ? "Owner" : "User";
+                newPlayerItem.GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                    (lobby.HostId == player.Id) ? "Owner" : "User";
+                newPlayerItem.transform.position -= new Vector3(0, playerItemOffset * i, 0);
             }
 
             await Task.Delay(1000);
@@ -276,13 +281,13 @@ public class LobbyManager : MonoBehaviour
         try
         {
             await LobbyService.Instance.RemovePlayerAsync(joinedLobbyId, playerData.Id);
-            joinedLobbyId = null;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
+        joinedLobbyId = null;
         ShowMainMenu();
     }
 
@@ -293,9 +298,7 @@ public class LobbyManager : MonoBehaviour
         isJoined = true;
         await LobbyService.Instance.UpdateLobbyAsync(joinedLobbyId, new UpdateLobbyOptions
         { Data = new Dictionary<string, DataObject> { { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, JoinCode) } } });
-
-        lobbyListParent.SetActive(false);
-        joinedLobbyParent.SetActive(false);
+        
         menuCam.SetActive(false);
         menus.SetActive(false);
     }
@@ -319,6 +322,7 @@ public class LobbyManager : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        menus.SetActive(true);
         mainMenu.SetActive(true);
         lobbyCreationParent.SetActive(false);
         lobbyListParent.SetActive(false);

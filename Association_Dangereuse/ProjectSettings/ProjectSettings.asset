@@ -932,11 +932,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 738b47bd-60fc-476c-93fa-b203a379db58
+  cloudProjectId: 7c94678c-1e54-4275-ab3f-ed88b7932b4e
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Association_Dangereuse
-  organizationId: xin0m
+  organizationId: takuryto_2
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
