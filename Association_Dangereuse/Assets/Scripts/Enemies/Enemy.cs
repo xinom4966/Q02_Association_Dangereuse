@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,6 +15,8 @@ public class Enemy : NetworkBehaviour
     [SerializeField] protected float chaseAcceleration;
     [SerializeField] protected float maxTravelDistance;
     [SerializeField] protected float killDistance;
+    [SerializeField] protected int damage;
+    [SerializeField] protected float damageInterval;
     protected Collider[] targetsInFov;
     protected bool playerInFov = false;
     protected EnemyState state;
@@ -21,6 +24,8 @@ public class Enemy : NetworkBehaviour
     protected GameObject target;
     protected float baseSpeed;
     protected float currentSpeed;
+    protected bool isTooClose = false;
+    protected bool isAttacking = false;
 
     public override void OnNetworkSpawn()
     {
@@ -71,6 +76,25 @@ public class Enemy : NetworkBehaviour
         }
     }*/
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isTooClose = true;
+            target = other.gameObject;
+            SetDestinationServerRpc(target.transform.position);
+            state = EnemyState.Aggresive;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isTooClose = false;
+        }
+    }
+
     protected void UpdateState()
     {
         switch (state)
@@ -101,17 +125,19 @@ public class Enemy : NetworkBehaviour
                 }
                 break;
             case EnemyState.Aggresive:
-                if (playerInFov)
+                if (playerInFov || isTooClose)
                 {
                     Pursuit();
                 }
                 else
                 {
+                    StopAllCoroutines();
+                    isAttacking = false;
                     aggressionLevel -= Time.deltaTime;
                     if (aggressionLevel >= 0)
                     {
                         state = EnemyState.Neutral;
-                        aggressionLevel = 0;
+                        //aggressionLevel = 0;
                     }
                 }
                 break;
@@ -120,6 +146,10 @@ public class Enemy : NetworkBehaviour
 
     protected virtual void Pursuit()
     {
+        if (target.GetComponent<CharacterHealth>().GetIsDead())
+        {
+            state = EnemyState.Neutral;
+        }
         currentSpeed = agent.speed;
         if (currentSpeed < chaseMaxSpeed)
         {
@@ -127,7 +157,15 @@ public class Enemy : NetworkBehaviour
         }
         if (Vector3.Distance(target.transform.position, transform.position) <= killDistance)
         {
-            //Inflict damage until death
+            if (!isAttacking)
+            {
+                StartCoroutine(DamageCoroutine());
+            }
+        }
+        else
+        {
+            StopAllCoroutines();
+            isAttacking = false;
         }
     }
 
@@ -151,6 +189,17 @@ public class Enemy : NetworkBehaviour
     private void SetDestinationClientRpc(Vector3 destination)
     {
         agent.SetDestination(destination);
+    }
+
+    IEnumerator DamageCoroutine()
+    {
+        isAttacking = true;
+        while (!target.GetComponent<CharacterHealth>().GetIsDead())
+        {
+            yield return new WaitForSeconds(damageInterval);
+            target.GetComponent<CharacterHealth>().TakeDamage(damage);
+        }
+        isAttacking = false;
     }
 }
 

@@ -94,4 +94,19 @@ public class CharacterInventory : NetworkBehaviour
             }
         }
     }
+
+    public void ReleaseAllItems()
+    {
+        foreach (Item item in inventory)
+        {
+            if (item != null)
+            {
+                item.Release();
+            }
+        }
+        foreach (Image image in inventoryImages)
+        {
+            image.sprite = inventoryPlaceHolder;
+        }
+    }
 }
