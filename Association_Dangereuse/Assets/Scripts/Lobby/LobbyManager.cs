@@ -348,10 +348,10 @@ public class LobbyManager : MonoBehaviour
         Application.Quit();
     }
 
-    private void OnApplicationQuit()
+    /*private void OnApplicationQuit()
     {
         if (joinedLobbyId != null) StartCoroutine(WantsToQuit());
-    }
+    }*/
 
     IEnumerator WantsToQuit()
     {
