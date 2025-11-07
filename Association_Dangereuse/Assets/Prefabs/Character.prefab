@@ -434,11 +434,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 183fb37495ab68f419e956332bf8f06b, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -1157,7 +1157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterHealth
   ShowTopMostFoldoutHeaderGroup: 1
-  baseHealth: 10
+  baseHealth: 50
   healthbar: {fileID: 5949549771753643928}
   hpGradient:
     serializedVersion: 2
@@ -1193,6 +1193,9 @@ MonoBehaviour:
   playerInventory: {fileID: 7529443445614081}
   characterCamera: {fileID: 5789439891688738722}
   spectatorCamera: {fileID: 545715964422296252}
+  userInterface: {fileID: 2637652767778345393}
+  characterCollider: {fileID: 7069753293753103830}
+  characterRB: {fileID: 4973493294504582015}
 --- !u!54 &4973493294504582015
 Rigidbody:
   m_ObjectHideFlags: 0

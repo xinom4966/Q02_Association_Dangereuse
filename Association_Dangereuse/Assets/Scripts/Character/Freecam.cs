@@ -26,7 +26,7 @@ public class Freecam : MonoBehaviour
     {
         movementVector3d = transform.forward * movementVector2d.y + transform.right * movementVector2d.x;
         movementVector3d = movementVector3d * travelSpeed * Time.deltaTime;
-        transform.Translate(movementVector3d);
+        transform.position += movementVector3d;
     }
 
     private void Rotate()

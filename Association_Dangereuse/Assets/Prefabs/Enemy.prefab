@@ -181,12 +181,12 @@ MonoBehaviour:
   listener: {fileID: 1291030464941905316}
   fov: 20
   fovAngle: 68
-  secondsBeforeAggression: 4
+  secondsBeforeAggression: 2
   chaseMaxSpeed: 10
   chaseAcceleration: 1.5
   maxTravelDistance: 40
   killDistance: 20
-  damage: 1
+  damage: 10
   damageInterval: 0.5
 --- !u!114 &1291030464941905316
 MonoBehaviour:

@@ -25,6 +25,7 @@ public class Enemy : NetworkBehaviour
     protected float baseSpeed;
     protected float currentSpeed;
     protected bool isTooClose = false;
+    protected bool isAttacking = false;
 
     public override void OnNetworkSpawn()
     {
@@ -80,8 +81,9 @@ public class Enemy : NetworkBehaviour
         if (other.CompareTag("Player"))
         {
             isTooClose = true;
-            target = GetComponent<Collider>().gameObject;
+            target = other.gameObject;
             SetDestinationServerRpc(target.transform.position);
+            state = EnemyState.Aggresive;
         }
     }
 
@@ -130,11 +132,12 @@ public class Enemy : NetworkBehaviour
                 else
                 {
                     StopAllCoroutines();
+                    isAttacking = false;
                     aggressionLevel -= Time.deltaTime;
                     if (aggressionLevel >= 0)
                     {
                         state = EnemyState.Neutral;
-                        aggressionLevel = 0;
+                        //aggressionLevel = 0;
                     }
                 }
                 break;
@@ -143,7 +146,10 @@ public class Enemy : NetworkBehaviour
 
     protected virtual void Pursuit()
     {
-        Debug.Log("pursuit");
+        if (target.GetComponent<CharacterHealth>().GetIsDead())
+        {
+            state = EnemyState.Neutral;
+        }
         currentSpeed = agent.speed;
         if (currentSpeed < chaseMaxSpeed)
         {
@@ -151,12 +157,15 @@ public class Enemy : NetworkBehaviour
         }
         if (Vector3.Distance(target.transform.position, transform.position) <= killDistance)
         {
-            Debug.Log("damage");
-            StartCoroutine(DamageCoroutine());
+            if (!isAttacking)
+            {
+                StartCoroutine(DamageCoroutine());
+            }
         }
         else
         {
             StopAllCoroutines();
+            isAttacking = false;
         }
     }
 
@@ -184,11 +193,13 @@ public class Enemy : NetworkBehaviour
 
     IEnumerator DamageCoroutine()
     {
-        while (true)
+        isAttacking = true;
+        while (!target.GetComponent<CharacterHealth>().GetIsDead())
         {
-            target.GetComponent<CharacterHealth>().TakeDamage(damage);
             yield return new WaitForSeconds(damageInterval);
+            target.GetComponent<CharacterHealth>().TakeDamage(damage);
         }
+        isAttacking = false;
     }
 }
 
