@@ -109,11 +109,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -181,11 +181,13 @@ MonoBehaviour:
   listener: {fileID: 1291030464941905316}
   fov: 20
   fovAngle: 68
-  secondsBeforeAggression: 4
+  secondsBeforeAggression: 2
   chaseMaxSpeed: 10
   chaseAcceleration: 1.5
   maxTravelDistance: 40
-  killDistance: 1
+  killDistance: 20
+  damage: 10
+  damageInterval: 0.5
 --- !u!114 &1291030464941905316
 MonoBehaviour:
   m_ObjectHideFlags: 0
