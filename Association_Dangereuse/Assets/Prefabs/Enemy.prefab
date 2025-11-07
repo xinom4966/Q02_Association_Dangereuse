@@ -109,11 +109,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 866091396
+  GlobalObjectIdHash: 4127972004
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -185,7 +185,9 @@ MonoBehaviour:
   chaseMaxSpeed: 10
   chaseAcceleration: 1.5
   maxTravelDistance: 40
-  killDistance: 1
+  killDistance: 20
+  damage: 1
+  damageInterval: 0.5
 --- !u!114 &1291030464941905316
 MonoBehaviour:
   m_ObjectHideFlags: 0

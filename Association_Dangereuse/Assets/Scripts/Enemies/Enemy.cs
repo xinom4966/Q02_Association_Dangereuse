@@ -24,6 +24,7 @@ public class Enemy : NetworkBehaviour
     protected GameObject target;
     protected float baseSpeed;
     protected float currentSpeed;
+    protected bool isTooClose = false;
 
     public override void OnNetworkSpawn()
     {
@@ -74,6 +75,24 @@ public class Enemy : NetworkBehaviour
         }
     }*/
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isTooClose = true;
+            target = GetComponent<Collider>().gameObject;
+            SetDestinationServerRpc(target.transform.position);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isTooClose = false;
+        }
+    }
+
     protected void UpdateState()
     {
         switch (state)
@@ -104,12 +123,13 @@ public class Enemy : NetworkBehaviour
                 }
                 break;
             case EnemyState.Aggresive:
-                if (playerInFov)
+                if (playerInFov || isTooClose)
                 {
                     Pursuit();
                 }
                 else
                 {
+                    StopAllCoroutines();
                     aggressionLevel -= Time.deltaTime;
                     if (aggressionLevel >= 0)
                     {
@@ -123,6 +143,7 @@ public class Enemy : NetworkBehaviour
 
     protected virtual void Pursuit()
     {
+        Debug.Log("pursuit");
         currentSpeed = agent.speed;
         if (currentSpeed < chaseMaxSpeed)
         {
@@ -130,6 +151,7 @@ public class Enemy : NetworkBehaviour
         }
         if (Vector3.Distance(target.transform.position, transform.position) <= killDistance)
         {
+            Debug.Log("damage");
             StartCoroutine(DamageCoroutine());
         }
         else
