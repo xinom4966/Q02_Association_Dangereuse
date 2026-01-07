@@ -44,6 +44,10 @@ public class CharacterMovement : NetworkBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         GetComponent<MeshRenderer>().enabled = false;
+        if (IsClient)
+        {
+            Destroy(Camera.main);
+        }
     }
 
     private void Update()
