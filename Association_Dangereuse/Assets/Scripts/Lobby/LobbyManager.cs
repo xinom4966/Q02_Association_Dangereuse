@@ -308,7 +308,7 @@ public class LobbyManager : MonoBehaviour
     [ClientRpc]
     private void hideClientMenus()
     {
-        menuCam.SetActive(false);
+        menuCam.gameObject.SetActive(false);
         menus.SetActive(false);
     }
     
