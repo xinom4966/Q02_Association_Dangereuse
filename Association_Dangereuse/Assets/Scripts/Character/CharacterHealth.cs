@@ -21,6 +21,10 @@ public class CharacterHealth : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        if (!IsOwner)
+        {
+            Destroy(healthbar.gameObject);
+        }
         currentHealth = baseHealth;
         UpdateHealthBar();
     }
