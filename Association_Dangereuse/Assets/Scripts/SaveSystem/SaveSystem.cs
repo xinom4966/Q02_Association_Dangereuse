@@ -19,9 +19,22 @@ public class SaveSystem : MonoBehaviour
 
     private void OnEnable()
     {
+        WWWForm form = new WWWForm();
+        form = UserInfo.GetInstance().GetUserInfosAsForm();
+        StartCoroutine(PostRequest("http://sitedemerde.com/myapi", form));
+    }
+
+    IEnumerator PostRequest(string uri, WWWForm form)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
+        yield return webRequest.SendWebRequest();
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Something went wrong while uploading data.");
+        }
         for (int i = 0; i < saveLimit; i++)
         {
-            StartCoroutine(GetRequest("http://sitedemerde.com/phpfile"));
+            StartCoroutine(GetRequest("http://sitedemerde.com/myapi"));
         }
         DisplaySaves();
     }
@@ -30,16 +43,14 @@ public class SaveSystem : MonoBehaviour
     {
         UnityWebRequest webRequest = UnityWebRequest.Get(uri);
         yield return webRequest.SendWebRequest();
-        switch (webRequest.result)
+        if (webRequest.result == UnityWebRequest.Result.Success)
         {
-            case UnityWebRequest.Result.ConnectionError:
-            case UnityWebRequest.Result.DataProcessingError:
-                Debug.LogError(string.Format("Something went wrong : {0}", webRequest.error));
-                break;
-            case UnityWebRequest.Result.Success:
-                Save fetchedSave = JsonConvert.DeserializeObject<Save>(webRequest.downloadHandler.text);
-                savesList.Add(fetchedSave);
-                break;
+            Save fetchedSave = JsonConvert.DeserializeObject<Save>(webRequest.downloadHandler.text);
+            savesList.Add(fetchedSave);
+        }
+        else
+        {
+            Debug.LogError("Something went wrong while downloading data.");
         }
     }
 
