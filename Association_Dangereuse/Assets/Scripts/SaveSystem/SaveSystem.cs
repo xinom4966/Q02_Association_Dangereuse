@@ -14,11 +14,12 @@ public class SaveSystem : MonoBehaviour
     }
     
     private List<Save> savesList = new List<Save>();
-    [SerializeField] private List<TextMeshProUGUI> textsList = new List<TextMeshProUGUI>();
+    [SerializeField] private List<TextMeshProUGUI> textsList;
     [SerializeField] private int saveLimit;
 
     private void OnEnable()
     {
+        textsList = new List<TextMeshProUGUI>(saveLimit);
         WWWForm form = new WWWForm();
         form = UserInfo.GetInstance().GetUserInfosAsForm();
         StartCoroutine(PostRequest("http://sitedemerde.com/myapi", form));
