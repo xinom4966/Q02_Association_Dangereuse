@@ -3,7 +3,6 @@ using UnityEngine;
 public class UserInfo : MonoBehaviour
 {
     private static UserInfo instance;
-    private int userID;
     private string userName;
     private string userPassword;
 
@@ -24,15 +23,27 @@ public class UserInfo : MonoBehaviour
         return instance;
     }
 
-    public int GetUserID() {  return userID; }
     public string GetUserName() { return userName; }
+    public void SetUserName(string newName)
+    {
+        userName = newName;
+    }
     public string GetUserPassword() { return userPassword; }
+    public void SetPassword(string newPassWord)
+    {
+        userPassword = newPassWord;
+    }
     public WWWForm GetUserInfosAsForm()
     {
         WWWForm form = new WWWForm();
-        form.AddField("userID", userID);
-        form.AddField("username", userName);
-        form.AddField("password", userPassword);
+        form.AddField("pseudo", userName);
+        form.AddField("passWrd", userPassword);
         return form;
+    }
+
+    public void EraseInfos()
+    {
+        userName = "";
+        userPassword = "";
     }
 }

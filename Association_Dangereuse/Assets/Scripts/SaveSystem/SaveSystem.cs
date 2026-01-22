@@ -22,7 +22,7 @@ public class SaveSystem : MonoBehaviour
         textsList = new List<TextMeshProUGUI>(saveLimit);
         WWWForm form = new WWWForm();
         form = UserInfo.GetInstance().GetUserInfosAsForm();
-        StartCoroutine(PostRequest("http://sitedemerde.com/myapi", form));
+        StartCoroutine(PostRequest("http://sitedemerde.com/Save.php", form));
     }
 
     IEnumerator PostRequest(string uri, WWWForm form)
@@ -31,7 +31,7 @@ public class SaveSystem : MonoBehaviour
         yield return webRequest.SendWebRequest();
         if (webRequest.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Something went wrong while uploading data.");
+            CustomDebug.Instance.DebugLog("Something went wrong while uploading data.");
         }
         for (int i = 0; i < saveLimit; i++)
         {
@@ -51,7 +51,7 @@ public class SaveSystem : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Something went wrong while downloading data.");
+            CustomDebug.Instance.DebugLog("Something went wrong while downloading data.");
         }
     }
 
