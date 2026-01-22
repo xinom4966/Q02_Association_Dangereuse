@@ -1,5 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AccountSystem : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class AccountSystem : MonoBehaviour
     [SerializeField] private TMP_InputField passwordConfirmationField;
     private string tempUserName;
     private string tempPassword;
+    WWWForm form = new WWWForm();
 
     public void TryCreateAccount()
     {
@@ -17,6 +20,18 @@ public class AccountSystem : MonoBehaviour
             CustomDebug.Instance.DebugLog("Password and password confirmation are different.");
             return;
         }
-        
+        tempUserName = usernameField.text;
+        tempPassword = passwordField.text;
+        UserInfo tempInfos = new UserInfo();
+        tempInfos.SetUserName(tempUserName);
+        tempInfos.SetPassword(tempPassword);
+        form = tempInfos.GetUserInfosAsForm();
+        StartCoroutine(PostRequest("http://sitedemerde.com/LogPlayer.php", form));
+    }
+
+    IEnumerator PostRequest(string uri, WWWForm form)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
+        yield return webRequest.SendWebRequest();
     }
 }
