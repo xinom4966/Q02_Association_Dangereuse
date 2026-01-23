@@ -33,5 +33,9 @@ public class AccountSystem : MonoBehaviour
     {
         UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
         yield return webRequest.SendWebRequest();
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            CustomDebug.Instance.DebugLog("Something went wrong while uploading data.");
+        }
     }
 }
