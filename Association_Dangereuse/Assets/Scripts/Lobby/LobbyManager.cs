@@ -68,13 +68,20 @@ public class LobbyManager : MonoBehaviour
         createLobbyPrivateToggle.onValueChanged.AddListener(OnCreateLobbyPrivateToggle);
 
         await UnityServices.InitializeAsync();
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
 
         profileSetupParent.SetActive(true);
         lobbyListParent.SetActive(false);
         joinedLobbyParent.SetActive(false);
         lobbyCreationParent.SetActive(false);
         inputPasswordParent.SetActive(false);
+
+        //Worst hack ever, only useful because the pause menu takes away cursor privileges on disable.
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void CreateProfile()
