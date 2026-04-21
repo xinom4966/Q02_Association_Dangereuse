@@ -35,6 +35,10 @@ public class Enemy : NetworkBehaviour
 
     protected void Update()
     {
+        if (!NetworkManager.didStart)
+        {
+            return;
+        }
         //Patrol routine
         if (state == EnemyState.Neutral && agent.remainingDistance == 0)
         {
